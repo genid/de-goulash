@@ -1,11 +1,16 @@
-# de-goulash
+# de-goulash: Bioinformatics Pipeline for Single-cell mixed deconvolution
+
+
+#### Lucie Kulhankova, Diego Montiel González, Manfred Kayser
+Erasmus MC University Medical Center Rotterdam, Department of Genetic Identification, Rotterdam, The Netherlands.
+
 
 de-goulash is a bioinformatics pipeline build in [Snakemake](https://snakemake.readthedocs.io/en/stable/) which allows clustering mixed individuals using 10x single-cell RNA-seq.
 
-The pipeline divides in two main steps. 
+The pipeline is divided in two main steps. 
 
 ### 1) Deconvolution of mixed single-cell samples, including genotyping and clustering. 
-The inputs needed includes the following: 
+The following inputs are needed: 
 1. Possorted_genome_bam.bam
 2. barcodes.tsv as output from 10x. this file contains the cells to use onwards.
 3. genome.fasta (Human reference genome e.g. hg19 or hg38 in fasta format)
