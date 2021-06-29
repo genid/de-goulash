@@ -93,7 +93,7 @@ docker run -it -v /current/directory/de-goulash/:/single-cell geniderasmusmc/de-
 
 
 ```
-docker run -it -v /media/disk1/diego/genid/Single-cell-docker/:/single-cell single-cell-docker --snakefile Snakefile_analysis --configfile config.yaml --cores 1
+docker run -it -v /current/directory/de-goulash/:/single-cell geniderasmusmc/de-goulash:1 --snakefile Snakefile_analysis --configfile config.yaml --cores 1
 ```
 
 ## Manual installation
