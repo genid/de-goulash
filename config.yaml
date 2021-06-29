@@ -1,18 +1,5 @@
 ## Inputs paths
 
-#sample_bam: /media/disk1/diego/genid/Single-cell/input/1/possorted_genome_trimmed.bam
-#barcodes: /media/disk1/diego/genid/Single-cell-docker/input/1/barcodes_reduced.txt
-#reference: /media/disk1/diego/genid/Single-cell-docker/input/reference/genome.fasta
-
-#regions: /media/disk1/diego/genid/Single-cell-docker/input/reference/regions.txt
-#reference_MT: /media/disk1/diego/genid/Single-cell-docker/input/reference/MT.fasta
-#regions_MT: /media/disk1/diego/genid/Single-cell-docker/input/reference/MT_regions.txt
-
-# for analysis
-#ref_exome: /media/disk1/diego/genid/Single-cell-docker/input/exome_96_remmapedto38.vcf.gz
-#ref_population: /media/disk1/diego/genid/Single-cell-docker/input/1000G/1000G_populations.txt
-#dirpath_1000G: /media/disk1/diego/genid/Single-cell-docker/input/1000G/
-
 sample_bam: /single-cell/input/1/possorted_genome_trimmed.bam
 barcodes: /single-cell/input/1/barcodes_reduced.txt
 
@@ -26,7 +13,6 @@ ref_exome: /single-cell/input/exome_96_remmapedto38.vcf.gz
 ref_population: /single-cell/input/1000G/1000G_populations.txt
 dirpath_1000G: /single-cell/input/1000G/
 
-flag: False #remove temporary files
 ## Parameters for rules
 cores: 40
 # Snakefile
@@ -47,7 +33,6 @@ n_neighbors: 5
 n_components: 3
 # if clusters > 1 then nBclust is executed to predict number of clusters to use
 clusters: 0
-#min_dist: 0.001
 
 ###########################
 #### Snakefile_analysis

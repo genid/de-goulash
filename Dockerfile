@@ -1,9 +1,7 @@
 FROM ubuntu
 
-#WORKDIR /usr/src/single-cell
 WORKDIR /single-cell
 
-## Installing samtools
 ENV DEBIAN_FRONTEND=noninteractive
 
 COPY . .
@@ -35,25 +33,5 @@ RUN apt update \
  && cp structure /usr/local/bin/ \
  && rm -rf /var/chache/apk/*
 
- 
- 
- #&& cd software \
- #&& git clone https://github.com/genid/Yleaf.git \
- #&& git clone --recurse-submodules git://github.com/samtools/htslib.git \
- #&& git clone git://github.com/samtools/bcftools.git \
- #&& cd bcftools \
- #&& make \
- #&& cd ../.. \
- #&& curl -L -o ./software/freebayes \
- #  https://github.com/freebayes/freebayes/releases/download/v1.3.1/freebayes-v1.3.1 \
- #&& cp ./software/freebayes /usr/local/bin/ \
- #&& curl -L -o ./software/subset-bam_linux \
- #https://github.com/10XGenomics/subset-bam/releases/download/v1.1.0/subset-bam_linux \
- #&& curl -L -o ./software/haplogrep-2.1.20.jar \
- #  https://github.com/seppinho/haplogrep-cmd/releases/download/v2.1.20/haplogrep-2.1.20.jar \ 
- 
-
-#CMD ["snakemake"]
 ENTRYPOINT ["snakemake"]
 
-#&& cp ./software/PicardCommandLine /usr/local/bin/ \
