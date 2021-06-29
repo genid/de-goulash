@@ -1,0 +1,4 @@
+pandas==1.2.0
+pyvcf==0.6.8
+pysam==0.15.4
+snakemake==5.31.1

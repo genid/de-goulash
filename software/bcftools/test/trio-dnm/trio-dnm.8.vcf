@@ -1,0 +1,9 @@
+##fileformat=VCFv4.2
+##reference=/lustre/scratch116/vr/ref/human/GRCh37/hs37d5.fa
+##contig=<ID=1,length=249250621>
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="Phred-scaled genotype likelihoods">
+##FORMAT=<ID=QS,Number=R,Type=Integer,Description="Phred-score allele quality sum">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Number of observation for each allele">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	mother	proband	father
+1	44158	.	GAATG	TAATT,TTATT,TGATG,TAATG	.	.	.	AD:PL:QS	14,2,0,0,0:0,26,383,42,389,405,42,389,405,405,11,357,373,373,364:449,25,0,0,0	13,0,0,2,5:18,57,389,57,389,389,33,365,365,359,0,332,332,308,317:412,0,0,33,83	16,0,2,0,0:0,48,452,29,433,427,48,452,433,452,43,447,428,447,444:502,0,28,0,0
+1	44158	.	GAATG	TAATG	.	.	.	AD:PL:QS	14,0:0,11,364:449,0	13,5:18,0,317:412,83	16,0:0,43,444:502,0

@@ -1,0 +1,121 @@
+## Snakemake analysis
+# target rule considered as last job
+
+import os
+import subprocess
+
+configfile: "config.yaml"
+
+import glob
+samples = list(range(1, len(glob.glob(config["dirpath_analysis"]+"/iter2/*.bam.vcf")) + 1))
+
+rule all:
+    input:
+        expand(config["dirpath_analysis"]+"/output/{sample}/Yleaf/", sample = samples)
+
+input_data = config["dirpath_analysis"] + "/iter2/{id}.bam.vcf"
+ids, = glob_wildcards(input_data)
+
+rule qc_vcf:    
+    input: config["dirpath_analysis"]+"/iter2/{id}.bam.vcf"
+    output: config["dirpath_analysis"]+"/output/{id}/{id}.filt.vcf"
+    params:
+        DP=config["dp_2"],
+        QUAL=config["qual_2"]
+    log:
+        config["dirpath_analysis"]+"/logs/output/{id}/qc_vcf.log"
+    shell:        
+        "(./software/vcffilter -f 'QUAL > {params.QUAL} & DP > {params.DP}' "
+        "{input} > {output}) 2> {log}"
+
+
+rule generate_sample_vcf:
+    input:
+        config["dirpath_analysis"]+"/output/{id}/{id}.filt.vcf",
+        config["ref_exome"]
+    output:        
+        config["dirpath_analysis"]+"/output/{id}/{id}.sample.vcf"    
+    script:
+        "scripts/generate_sample_vcf.py"
+
+
+rule generate_ref_vcf:
+    input:                
+        config["dirpath_analysis"]+"/output/{id}/{id}.sample.vcf"
+    output:
+        config["dirpath_analysis"]+"/output/{id}/{id}.ref.vcf"
+    params:
+        config["dirpath_1000G"]    
+    script:
+        "scripts/generate_ref_vcf.py"
+
+
+rule remove_header_sample:
+    input:        
+        config["dirpath_analysis"]+"/output/{id}/{id}.sample.vcf"
+    output:
+        config["dirpath_analysis"]+"/output/{id}/{id}.sample_noheader.vcf"
+    log:
+        config["dirpath_analysis"]+"/logs/output/{id}/remove_header_sample.log"
+    shell:
+        "(egrep -v '^##' {input} > {output}) 2> {log}"
+
+
+rule remove_header_ref:
+    input:
+        config["dirpath_analysis"]+"/output/{id}/{id}.ref.vcf",
+        config["dirpath_analysis"]+"/output/{id}/{id}.sample_noheader.vcf"
+    output:        
+        config["dirpath_analysis"]+"/output/{id}/{id}.ref_noheader.vcf"
+    log:
+        config["dirpath_analysis"]+"/logs/output/{id}/remove_header_ref.log"
+    shell:        
+        "(egrep -v '^##' {input[0]} > {output}) 2> {log}"
+
+
+rule compute_forensics_params:
+    input:        
+        sample= config["dirpath_analysis"]+"/output/{id}/{id}.sample_noheader.vcf",
+        ref=config["dirpath_analysis"]+"/output/{id}/{id}.ref_noheader.vcf"        
+    output:
+        forensic=config["dirpath_analysis"]+"/output/{id}/{id}_forensic_params.txt"
+    params:
+        population=config["ref_population"],
+        main_params=config["mainparams_file"],
+        extra_params=config["extraparams_file"],
+        folder=config["dirpath_analysis"]+"/output/{id}"
+    shell:
+        "Rscript --vanilla scripts/computeForensicParameters.R "
+	"-i {input.sample} -o {output.forensic} -f {params.folder} "
+        "-r {input.ref} -p {params.population} -m {params.main_params} -e {params.extra_params}"
+
+
+rule run_haplogrep:
+    input:
+        forensic=config["dirpath_analysis"]+"/output/{id}/{id}_forensic_params.txt",              
+        vcf=config["dirpath_analysis"]+"/output/{id}/{id}.filt.vcf"
+    output:
+        config["dirpath_analysis"]+"/output/{id}/Haplogrep/haplogroups.txt"        
+    log:
+        config["dirpath_analysis"]+"/logs/output/{id}/haplogrep.log"
+    shell:
+        "(java -jar ./software/haplogrep-2.1.20.jar --in {input.vcf} --format vcf --out {output}) 2> {log}"
+
+
+rule run_yleaf:
+    input:
+        bam=config["dirpath_analysis"]+"/iter2/{id}.bam",
+        forensic=config["dirpath_analysis"]+"/output/{id}/{id}_forensic_params.txt",
+        haplogrep=config["dirpath_analysis"]+"/output/{id}/Haplogrep/haplogroups.txt"
+    output:
+        dir=directory(config["dirpath_analysis"]+"/output/{id}/Yleaf/")
+    params:
+        r=config["read_depth"],
+        q=config["quality"],
+        b=config["base_calling"],
+        pos=config["positions_file"]
+    log:
+        config["dirpath_analysis"]+"/logs/output/{id}/yleaf.log"
+    shell:
+        "(python software/Yleaf/Yleaf.py -bam {input.bam} -pos {params.pos} --out {output.dir} -r {params.r} -q {params.q} -b {params.b}) 2> {log}"
+

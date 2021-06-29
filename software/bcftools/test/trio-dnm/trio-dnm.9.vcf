@@ -1,0 +1,21 @@
+##fileformat=VCFv4.2
+##reference=file:///lustre/scratch116/vr/ref/human/GRCh37/hs37d5.fa
+##contig=<ID=1,length=146364022>
+##contig=<ID=X,length=146364022>
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	proband	mother	father
+1	9	.	G	C,CC,CCC,CCCC	.	.	.	GT	0/1	2/3	4/0
+1	10	.	G	C	.	.	.	GT	0/1	0/1	0/0
+1	11	.	G	C	.	.	.	GT	0/1	0/0	0/1
+1	12	.	G	C	.	.	.	GT	1/1	0/1	0/1
+1	13	.	G	C,CC,CCC,CCCC	.	.	.	GT	4/4	0/4	0/4
+1	50	.	G	C	.	.	.	GT	1/1	0/0	1/1
+1	51	.	G	C	.	.	.	GT	0/1	0/0	0/0
+1	52	.	G	C	.	.	.	GT	0/1	1/1	1/1
+1	53	.	G	C,T	.	.	.	GT	0/2	0/1	0/0
+1	54	.	G	C,T,GG,GGG,GGGG	.	.	.	GT	1/5	1/3	1/1
+X	10	.	G	C	.	.	.	GT	1/1	0/0	0/1
+X	11	.	G	C	.	.	.	GT	1	0/0	0/1
+X	12	.	G	C	.	.	.	GT	0/1	0/0	0/1
+X	12	.	G	C	.	.	.	GT	0/1	0/1	0/0
+X	12	.	G	C	.	.	.	GT	0/1	0/0	1/1
