@@ -1,7 +1,7 @@
 # de-goulash: Bioinformatics Pipeline for Single-cell mixed deconvolution
 
 
-#### Lucie Kulhankova, Diego Montiel González, Manfred Kayser
+#### Lucie Kulhankova, Diego Montiel González, Eskeatnaf Mulugeta, Manfred Kayser
 Erasmus MC University Medical Center Rotterdam, Department of Genetic Identification, Rotterdam, The Netherlands.
 
 
