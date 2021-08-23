@@ -19,11 +19,11 @@ The following inputs are needed:
 6. *MT_regions.txt 
 
 Input files with asterik * [4, 5, 6] can be generated with the python script. 
-```
-python process_reference.py [path/genome.fasta] 
-```
 
-### 2) Population assignation and statistical analysis. It needs the output variant calling for each assignated cluster from step 1 and it will calculate likelihood of Forensic Parameters, population assignation, execute haplogrep and finally Yleaf v.2.2. 
+> python process_reference.py [path/genome.fasta] 
+
+
+### 2) Individual genetic identification and biogeographical ancestry assigment. It requires the output variant calling for each assignated cluster from step 1 and it will calculate likelihood of forensic parameters, population assignation, execute haplogrep and finally Yleaf v.2.2. 
 The inputs needed includes the following: 
 1. Exone reference: exome_96_remmapedto38.vcf.gz
 2. Reference population based on 1000G project: 100G_populations.txt
@@ -35,24 +35,24 @@ The inputs needed includes the following:
 * sample_bam: /single-cell/input/1/possorted_genome_trimmed.bam
 * barcodes: /single-cell/input/1/barcodes_reduced.txt
 * reference: /single-cell/input/reference/genome.fasta
-* regions: /single-cell/input/reference/regions.txt
+* regions: /single-cell/input/reference/regions.txt #for parallel freebayes, region file can be generated with https://github.com/nh13/freebayes/blob/master/scripts/fasta_generate_regions.py
 * reference_MT: /single-cell/input/reference/MT.fasta
 * regions_MT: /single-cell/input/reference/MT_regions.txt
-#### Snakemake settings
+#### Snakemake settings 
 * cores: 4
-* dp: 50
-* qual: 60
+* dp: 50 # SNP filtering depth
+* qual: 60 # SNP filtering quality
 #### threshold for iteration 1
-* thr_cell_1: 10
+* thr_cell_1: 10 #Minimal number of SNPs per cell
 #### threshold for iteration 2
-* thr_cell_2: 20
+* thr_cell_2: 20 #Minimal number of SNPs per cell
 #### rule for merging cells python
-* threshold_coverage: 10
-* threshold_coverage_pos: 5
+* threshold_coverage: 10 #treshhold total coverage of selected SNPs per cell
+* threshold_coverage_pos: 5 #treshold coverage per selected SNP per cell
 * threshold_base_calling: 90
 #### rule for for clustering Rscript
-* n_neighbors: 5
-* n_components: 3
+* n_neighbors: 5 #setting for UMAP clustering
+* n_components: 300
 * clusters: 0 # if clusters > 1 then nBclust is executed to predict number of clusters to use
 ### Snakemake analysis step 2
 #### Inputs
@@ -60,8 +60,8 @@ The inputs needed includes the following:
 * ref_population: /single-cell/input/1000G/1000G_populations.txt
 * dirpath_1000G: /single-cell/input/1000G/
 * dirpath_analysis: output
-* dp_2: 50
-* qual_2: 60
+* dp_2: 50 #SNP filtering depth
+* qual_2: 60 #SNP filtering quality
 #### Yleaf parameters
 * read_depth: 1
 * quality: 20
@@ -73,13 +73,13 @@ The inputs needed includes the following:
 We provided a docker image where you can run the pipeline without having to install any other dependency than docker. Although you need root permissions to proceed. 
 
 Download docker image (2.03gb)
-```
-docker pull geniderasmusmc/de-goulash:1
-```
+
+> docker pull geniderasmusmc/de-goulash:1
+
 Tested in Docker version 19.03.2, build 6a30dfc
-```
-docker --version
-```
+
+> docker --version
+
 
 You can execute de-goulash Snakemake pipeline throught docker image-container. You have to manually mount the current directory where input files are located. 
 
@@ -90,16 +90,15 @@ You can execute de-goulash Snakemake pipeline throught docker image-container. Y
 * Container name -> geniderasmusmc/de-goulash:1
 * Target file [only change output name e.g. output_test/iter2/cells_merge_clusters.vcf] -> output/iter2/cells_merge_clusters.vcf
 
-```
-docker run -it -v /current/directory/de-goulash/:/single-cell geniderasmusmc/de-goulash:1 output/iter2/cells_merge_clusters.vcf --snakefile Snakefile --configfile config.yaml --cores 1
-```
+
+> docker run -it -v /current/directory/de-goulash/:/single-cell geniderasmusmc/de-goulash:1 output/iter2/cells_merge_clusters.vcf --snakefile Snakefile --configfile config.yaml --cores 1
+
 
 ## 2) de-goulash statistical analysis
 
 
-```
-docker run -it -v /current/directory/de-goulash/:/single-cell geniderasmusmc/de-goulash:1 --snakefile Snakefile_analysis --configfile config.yaml --cores 1
-```
+> docker run -it -v /current/directory/de-goulash/:/single-cell geniderasmusmc/de-goulash:1 --snakefile Snakefile_analysis --configfile config.yaml --cores 1
+
 
 ## Manual installation
 
@@ -114,24 +113,22 @@ Instead of using docker container you can install everything independently and r
 Recommended use conda or Python3 venv 
 
 ### Install libraries
-```
-pip3 install requirements.txt
-```
-```
-Rscript requirements.R
-```
-```
-git clone https://github.com/genid/de-goulash.git
-```
+
+> pip3 install requirements.txt
+
+> Rscript requirements.R
+
+> git clone https://github.com/genid/de-goulash.git
+
 
 
 ### To run through Snakemake pipeline
 
 Step 1
-```
-snakemake output/iter2/cells_merge_clusters.vcf --snakefile Snakefile --configfile config.yaml --cores 1
-```
+
+> snakemake output/iter2/cells_merge_clusters.vcf --snakefile Snakefile --configfile config.yaml --cores 1
+
 Step 2
-```
-snakemake --snakefile Snakefile_analysis --configfile config.yaml  --cores 1
-```
+
+> snakemake --snakefile Snakefile_analysis --configfile config.yaml  --cores 1
+
